@@ -1,4 +1,4 @@
-def slack notifications(String buildStatus = 'STARTED') {
+def sendSlackNotifications(String buildStatus = 'STARTED') {
   // build status of null means successful
   buildStatus =  buildStatus ?: 'SUCCESS'
 
@@ -21,7 +21,7 @@ def slack notifications(String buildStatus = 'STARTED') {
   }
 
   // Send notifications
-  slack notifications (color: colorCode, message: summary)
+  sendSlackNotifications(color: colorCode, message: summary)
 }
 
 
@@ -61,4 +61,4 @@ currentBuild.result = "Failed"
 finally{
 sendSlackNotifications(currentBuild.result)
 }
-}//Node closing
+}//node closing
