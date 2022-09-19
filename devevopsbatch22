@@ -1,6 +1,6 @@
 def slack notifications(String buildStatus = 'STARTED') {
   // build status of null means successful
-  buildStatus =  buildStatus ?: 'SUCCESSFUL'
+  buildStatus =  buildStatus ?: 'SUCCESS'
 
   // Default values
   def colorName = 'RED'
@@ -12,7 +12,7 @@ def slack notifications(String buildStatus = 'STARTED') {
   if (buildStatus == 'STARTED') {
     color = 'YELLOW'
     colorCode = '#FFFF00'
-  } else if (buildStatus == 'SUCCESSFUL') {
+  } else if (buildStatus == 'SUCCESS') {
     color = 'GREEN'
     colorCode = '#00FF00'
   } else {
@@ -54,11 +54,11 @@ sshagent(['805ad384-5382-4889-bf1a-5e9540c8c1f4']) {
    sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.234.20.209:/opt/apache-tomcat-9.0.65/webapps/"
 }
 }
-}//try closing
+}//Try closing
 catch(e){
-currentbuild.result = "failed"
+currentBuild.result = "Failed"
 }
 finally{
-sendslackNotifications(currentBuild.result)
+sendSlackNotifications(currentBuild.result)
 }
 }//Node closing
