@@ -1,0 +1,30 @@
+node{
+    
+echo "job name is: ${env.JOB_NAME}"
+echo "job name is: ${env.NODE_NAME}"  
+    
+def mavenHome= tool name:'maven3.8.4'
+
+//get the code from the github repo
+stage('checkout code'){
+git branch: 'development', credentialsId: '178989c2-d797-4508-a9f5-9e264fe74a88', url: 'https://github.com/jrajin/maven-web-application.git'
+}
+//do the build from the maven
+stage('build'){
+sh "${mavenHome}/bin/mvn clean package"
+}
+//exicute the sonarqube report 
+stage('exicute sonarqube report'){
+sh "${mavenHome}/bin/mvn sonar:sonar"
+}
+//upload artfacts into artfactory report
+stage('artfacts into artfactory report'){
+sh "${mavenHome}/bin/mvn deploy"
+}
+//deploy application into tomcat server
+stage('deploy application into tomcat server'){
+sshagent(['805ad384-5382-4889-bf1a-5e9540c8c1f4']) {
+   sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.234.20.209:/opt/apache-tomcat-9.0.65/webapps/"
+}
+}
+}
