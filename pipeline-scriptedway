@@ -1,5 +1,4 @@
 node{
-    
 echo "job name is: ${env.JOB_NAME}"
 echo "job name is: ${env.NODE_NAME}"  
     
